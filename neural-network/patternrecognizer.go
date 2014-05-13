@@ -7,15 +7,6 @@ import (
 	//matrix "github.com/skelterjohn/go.matrix"
 )
 
-func activate(sum int) int {
-	if sum > 0 {
-		return 1
-	} else {
-		return -1
-	}
-  return 1
-}
-
 type PatternRecognizer struct{ weights []int }
 
 func New(n int) *PatternRecognizer {
@@ -40,9 +31,26 @@ func (patternrecog *PatternRecognizer) Feedforward(inputs []int) int {
 	return activate(sum)
 }
 
+func (patternrecog *PatternRecognizer) activate(sum int) int {
+	if sum > 0 {
+		return 1
+	} else {
+		return -1
+	}
+	return 1
+}
+
+func (patternrecog *PatternRecognizer) Train(inputs []float64, desired int) {
+	guess := Feedforward(inputs)
+	error := desired - guess
+	for i := range patternrecog.weights {
+		patternrecogweights[i] += c * error * inputs[i]
+	}
+}
+
 func main() {
 	patternrecog := New(3)
-  point := []int{50,-12,1};
-  result := patternrecog.Feedforward(point);
+	point := []int{50, -12, 1}
+	result := patternrecog.Feedforward(point)
 	fmt.Println(result)
 }
