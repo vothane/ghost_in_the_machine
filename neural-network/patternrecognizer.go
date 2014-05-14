@@ -31,7 +31,7 @@ func (patternrecog PatternRecognizer) Feedforward(inputs []float64) float64 {
 	return patternrecog.activate(sum)
 }
 
-func (patternrecog*PatternRecognizer) activate(sum float64) float64 {
+func (patternrecog *PatternRecognizer) activate(sum float64) float64 {
 	var val float64
 	if sum > 0 {
 		val = 1.0
@@ -47,6 +47,16 @@ func (patternrecog PatternRecognizer) Train(inputs []float64, desired float64) {
 	for i := range patternrecog.weights {
 		patternrecog.weights[i] += 0.01 * error * inputs[i]
 	}
+}
+
+type Trainer struct {
+	inputs []float64
+	answer int
+}
+
+func (trainer *Trainer) Train(x float64, y float64, a int) {
+	trainer.inputs = []float64{x, y, 1.0}
+	trainer.answer = a
 }
 
 func main() {
