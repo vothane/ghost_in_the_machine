@@ -23,7 +23,7 @@ func New(n int) *PatternRecognizer {
 	return &patternrecog
 }
 
-func (patternrecog *PatternRecognizer) Feedforward(inputs []float64) float64 {
+func (patternrecog PatternRecognizer) Feedforward(inputs []float64) float64 {
 	sum := 0.0
 	for i := range patternrecog.weights {
 		sum += inputs[i] * patternrecog.weights[i]
@@ -31,7 +31,7 @@ func (patternrecog *PatternRecognizer) Feedforward(inputs []float64) float64 {
 	return patternrecog.activate(sum)
 }
 
-func (patternrecog *PatternRecognizer) activate(sum float64) float64 {
+func (patternrecog*PatternRecognizer) activate(sum float64) float64 {
 	var val float64
 	if sum > 0 {
 		val = 1.0
@@ -41,7 +41,7 @@ func (patternrecog *PatternRecognizer) activate(sum float64) float64 {
 	return val
 }
 
-func (patternrecog *PatternRecognizer) Train(inputs []float64, desired float64) {
+func (patternrecog PatternRecognizer) Train(inputs []float64, desired float64) {
 	guess := patternrecog.Feedforward(inputs)
 	error := desired - guess
 	for i := range patternrecog.weights {
