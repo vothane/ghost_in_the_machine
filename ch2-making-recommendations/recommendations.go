@@ -2,17 +2,25 @@ package main
 
 import (
 	"fmt"
+	"math"
 )
 
-func simdist(prefs map[string]map[string]float64, person1 string, person2 string) map[string]int {
+func simdist(prefs map[string]map[string]float64, person1 string, person2 string) float64 {
 	si := make(map[string]int)
-	
+
 	for key := range prefs[person1] {
 		if _, ok := prefs[person2][key]; ok {
 			si[key] = 1
 		}
 	}
-	return si
+
+	sumofsquares := 0.0
+	for key := range prefs[person1] {
+		if _, ok := prefs[person2][key]; ok {
+			sumofsquares += math.Pow((prefs[person1][key] - prefs[person2][key]), 2)
+		}
+	}
+	return sumofsquares
 }
 
 func main() {
