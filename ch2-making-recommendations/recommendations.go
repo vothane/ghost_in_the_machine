@@ -7,7 +7,6 @@ import (
 
 func simdist(prefs map[string]map[string]float64, person1 string, person2 string) float64 {
 	si := make(map[string]int)
-
 	for key := range prefs[person1] {
 		if _, ok := prefs[person2][key]; ok {
 			si[key] = 1
@@ -20,7 +19,7 @@ func simdist(prefs map[string]map[string]float64, person1 string, person2 string
 			sumofsquares += math.Pow((prefs[person1][key] - prefs[person2][key]), 2)
 		}
 	}
-	return sumofsquares
+	return 1/(1+sumofsquares)
 }
 
 func main() {
