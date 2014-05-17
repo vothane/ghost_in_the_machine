@@ -48,7 +48,11 @@ func simpearson(prefs map[string]map[string]float64, person1 string, person2 str
 			pSum += prefs[person1][key] * prefs[person2][key]
 		}
 	}
-	return pSum
+	n := float64(len(si))
+	num := pSum - (sum1 * sum2 / n)
+	den := math.Sqrt((sum1Sq - math.Pow(sum1, 2)/n) * (sum2Sq - math.Pow(sum2, 2)/n))
+	r := num / den
+	return r
 }
 
 func main() {
