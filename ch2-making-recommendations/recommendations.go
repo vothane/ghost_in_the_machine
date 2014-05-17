@@ -19,7 +19,36 @@ func simdist(prefs map[string]map[string]float64, person1 string, person2 string
 			sumofsquares += math.Pow((prefs[person1][key] - prefs[person2][key]), 2)
 		}
 	}
-	return 1/(1+sumofsquares)
+	return 1 / (1 + sumofsquares)
+}
+
+func simpearson(prefs map[string]map[string]float64, person1 string, person2 string) float64 {
+	si := make(map[string]int)
+	for key := range prefs[person1] {
+		if _, ok := prefs[person2][key]; ok {
+			si[key] = 1
+		}
+	}
+
+	sum1 := 0.0
+	sum2 := 0.0
+	sum1Sq := 0.0
+	sum2Sq := 0.0
+	pSum := 0.0
+	for key := range prefs[person1] {
+		if _, ok := prefs[person2][key]; ok {
+			sum1 += prefs[person1][key]
+			sum1Sq += math.Pow(prefs[person1][key], 2)
+		}
+	}
+	for key := range prefs[person2] {
+		if _, ok := prefs[person1][key]; ok {
+			sum2 += prefs[person2][key]
+			sum2Sq += math.Pow(prefs[person2][key], 2)
+			pSum += prefs[person1][key] * prefs[person2][key]
+		}
+	}
+	return pSum
 }
 
 func main() {
@@ -42,6 +71,8 @@ func main() {
 			"The Night Listener": 3.0, "Superman Returns": 5.0, "You, Me and Dupree": 3.5},
 		"Toby": {"Snakes on a Plane": 4.5, "You, Me and Dupree": 1.0, "Superman Returns": 4.0},
 	}
-	result := simdist(critics, "Lisa Rose", "Gene Seymour")
-	fmt.Println(result)
+	resultsimdist := simdist(critics, "Lisa Rose", "Gene Seymour")
+	resultsimpearson := simpearson(critics, "Lisa Rose", "Gene Seymour")
+	fmt.Println(resultsimdist)
+	fmt.Println(resultsimpearson)
 }
