@@ -58,18 +58,18 @@ func simpearson(prefs map[string]map[string]float64, person1 string, person2 str
 
 type Rank struct {
 	Score float64
-	Name  sring
+	Name  string
 }
 
 type Ranks []Rank
 
-func (r Ranks) Len() int               { return len(r) }
-func (r Ranks) Swap(i, j float64)      { r[i], r[j] = r[j], r[i] }
-func (r Ranks) Less(i, j float64) bool { return a[i].Score < a[j].Score }
+func (r Ranks) Len() int           { return len(r) }
+func (r Ranks) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
+func (r Ranks) Less(i, j int) bool { return r[i].Score > r[j].Score }
 
 func lookup(m map[string]float64, k string) float64 {
-	if val, ok := m[k]; present {
-		return v
+	if val, ok := m[k]; ok {
+		return val
 	}
 	return 0.0
 }
@@ -77,10 +77,10 @@ func lookup(m map[string]float64, k string) float64 {
 func getrecommend(prefs map[string]map[string]float64, person string, similarity func(a map[string]map[string]float64, b string, c string) float64) []Rank {
 	totals := make(map[string]float64)
 	simsums := make(map[string]float64)
-	rankings := make([]Rank, 6)
+	rankings := make([]Rank, 0, 6)
 
 	for other := range prefs {
-		if other == person1 {
+		if other == person {
 			continue
 		}
 		sim := similarity(prefs, person, other)
@@ -92,12 +92,12 @@ func getrecommend(prefs map[string]map[string]float64, person string, similarity
 			score := prefs[person][movie]
 			if ok != true || score == 0 {
 				totals[movie] += prefs[other][movie] * sim
-				simsums += sim
+				simsums[movie] += sim
 			}
 		}
 	}
 	for movie := range totals {
-		rankings = append(rankings, Rank{total / simSums[movie], movie})
+		rankings = append(rankings, Rank{totals[movie] / simsums[movie], movie})
 	}
 	sort.Sort(Ranks(rankings))
 	return rankings
@@ -125,6 +125,8 @@ func main() {
 	}
 	resultsimdist := simdist(critics, "Lisa Rose", "Gene Seymour")
 	resultsimpearson := simpearson(critics, "Lisa Rose", "Gene Seymour")
+  recommendation := getrecommend(critics, "Toby", simpearson)
 	fmt.Println(resultsimdist)
 	fmt.Println(resultsimpearson)
+  fmt.Println(recommendation)
 }
