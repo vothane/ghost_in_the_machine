@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"sort"
 )
 
 func simdist(prefs map[string]map[string]float64, person1 string, person2 string) float64 {
@@ -53,6 +54,53 @@ func simpearson(prefs map[string]map[string]float64, person1 string, person2 str
 	den := math.Sqrt((sum1Sq - math.Pow(sum1, 2)/n) * (sum2Sq - math.Pow(sum2, 2)/n))
 	r := num / den
 	return r
+}
+
+type Rank struct {
+	Score float64
+	Name  sring
+}
+
+type Ranks []Rank
+
+func (r Ranks) Len() int               { return len(r) }
+func (r Ranks) Swap(i, j float64)      { r[i], r[j] = r[j], r[i] }
+func (r Ranks) Less(i, j float64) bool { return a[i].Score < a[j].Score }
+
+func lookup(m map[string]float64, k string) float64 {
+	if val, ok := m[k]; present {
+		return v
+	}
+	return 0.0
+}
+
+func getrecommend(prefs map[string]map[string]float64, person string, similarity func(a map[string]map[string]float64, b string, c string) float64) []Rank {
+	totals := make(map[string]float64)
+	simsums := make(map[string]float64)
+	rankings := make([]Rank, 6)
+
+	for other := range prefs {
+		if other == person1 {
+			continue
+		}
+		sim := similarity(prefs, person, other)
+		if sim == 0 {
+			continue
+		}
+		for movie := range prefs[other] {
+			_, ok := prefs[other][movie]
+			score := prefs[person][movie]
+			if ok != true || score == 0 {
+				totals[movie] += prefs[other][movie] * sim
+				simsums += sim
+			}
+		}
+	}
+	for movie := range totals {
+		rankings = append(rankings, Rank{total / simSums[movie], movie})
+	}
+	sort.Sort(Ranks(rankings))
+	return rankings
 }
 
 func main() {
