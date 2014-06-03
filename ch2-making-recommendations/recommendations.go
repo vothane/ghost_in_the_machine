@@ -125,8 +125,8 @@ func main() {
 	}
 	resultsimdist := simdist(critics, "Lisa Rose", "Gene Seymour")
 	resultsimpearson := simpearson(critics, "Lisa Rose", "Gene Seymour")
-  recommendation := getrecommend(critics, "Toby", simpearson)
+	recommendation := getrecommend(critics, "Toby", simpearson)
 	fmt.Println(resultsimdist)
 	fmt.Println(resultsimpearson)
-  fmt.Println(recommendation)
+	fmt.Println(recommendation)
 }
