@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"math/rand"
 	"sort"
 )
 
@@ -62,6 +63,18 @@ func colMinMax(data [][]float64) [2][2]float64 {
 	return minmax
 }
 
+func kcluster(data [][]float64, k int) [2][2]float64 {
+	ranges := colMinMax(data)
+	var clusters [2][2]float64
+	r := rand.New(rand.NewSource(99))
+
+	for i := 0; i < k; i++ {
+		clusters[i] = [...]float64{r.Float64()*(ranges[0][1]-ranges[0][0]) + ranges[0][0],
+			r.Float64()*(ranges[1][1]-ranges[1][0]) + ranges[1][0]}
+	}
+	return clusters
+}
+
 func main() {
 	v1 := []float64{0.0, 1.0, 0.0, 0.0, 3.0, 3.0, 0.0, 0.0, 3.0, 0.0, 6.0, 0.0, 1.0, 0.0, 4.0, 3.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4.0, 0.0}
 	v2 := []float64{0.0, 2.0, 1.0, 0.0, 6.0, 2.0, 1.0, 0.0, 4.0, 5.0, 25.0, 0.0, 0.0, 0.0, 6.0, 12.0, 4.0, 2.0, 1.0, 4.0, 0.0, 3.0, 0.0}
@@ -69,4 +82,5 @@ func main() {
 	fmt.Println(pearson(v1, v2))
 	fmt.Println(rows)
 	fmt.Println(colMinMax(rows))
+	fmt.Println(kcluster(rows, 2))
 }
