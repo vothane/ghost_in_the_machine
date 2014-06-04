@@ -63,16 +63,33 @@ func colMinMax(data [][]float64) [2][2]float64 {
 	return minmax
 }
 
-func kcluster(data [][]float64, k int) [2][2]float64 {
+func kcluster(data [][]float64, k int) [][]int {
 	ranges := colMinMax(data)
 	var clusters [2][2]float64
 	r := rand.New(rand.NewSource(99))
+	bestMatches := make([][]int, k)
 
 	for i := 0; i < k; i++ {
 		clusters[i] = [...]float64{r.Float64()*(ranges[0][1]-ranges[0][0]) + ranges[0][0],
 			r.Float64()*(ranges[1][1]-ranges[1][0]) + ranges[1][0]}
 	}
-	return clusters
+
+	//var lastMatches [2][2]int
+	for t := 0; t < 1; t++ {
+		for j := 0; j < len(data); j++ {
+			row := data[j]
+			bestMatch := 0
+
+			for i := 0; i < k; i++ {
+				d := pearson(clusters[i][:], row)
+				if d < pearson(clusters[bestMatch][:], row) {
+					bestMatch = i
+				}
+			}
+			bestMatches[bestMatch] = append(bestMatches[bestMatch], j)
+		}
+	}
+	return bestMatches
 }
 
 func main() {
