@@ -68,13 +68,13 @@ func kcluster(data [][]float64, k int) [][]int {
 	var clusters [2][2]float64
 	r := rand.New(rand.NewSource(99))
 	bestMatches := make([][]int, k)
+	var avgs [2][2]float64
 
 	for i := 0; i < k; i++ {
 		clusters[i] = [...]float64{r.Float64()*(ranges[0][1]-ranges[0][0]) + ranges[0][0],
 			r.Float64()*(ranges[1][1]-ranges[1][0]) + ranges[1][0]}
 	}
 
-	//var lastMatches [2][2]int
 	for t := 0; t < 1; t++ {
 		for j := 0; j < len(data); j++ {
 			row := data[j]
@@ -87,6 +87,20 @@ func kcluster(data [][]float64, k int) [][]int {
 				}
 			}
 			bestMatches[bestMatch] = append(bestMatches[bestMatch], j)
+		}
+	}
+
+	for i := 0; i < k; i++ {
+		if len(bestMatches[i]) > 0 {
+			for rowid := range bestMatches[i] {
+				for m := 0; m < len(data[rowid]); m++ {
+					avgs[i][m] += data[rowid][m]
+				}
+			}
+			for j := 0; j < len(avgs); j++ {
+				avgs[i][j] /= float64(len(bestMatches[i]))
+			}
+			clusters[i] = avgs[i]
 		}
 	}
 	return bestMatches
