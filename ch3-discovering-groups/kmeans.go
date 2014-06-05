@@ -88,19 +88,19 @@ func kcluster(data [][]float64, k int) [][]int {
 			}
 			bestMatches[bestMatch] = append(bestMatches[bestMatch], j)
 		}
-	}
 
-	for i := 0; i < k; i++ {
-		if len(bestMatches[i]) > 0 {
-			for rowid := range bestMatches[i] {
-				for m := 0; m < len(data[rowid]); m++ {
-					avgs[i][m] += data[rowid][m]
+		for i := 0; i < k; i++ {
+			if len(bestMatches[i]) > 0 {
+				for rowid := range bestMatches[i] {
+					for m := 0; m < len(data[rowid]); m++ {
+						avgs[i][m] += data[rowid][m]
+					}
 				}
+				for j := 0; j < len(avgs); j++ {
+					avgs[i][j] /= float64(len(bestMatches[i]))
+				}
+				clusters[i] = avgs[i]
 			}
-			for j := 0; j < len(avgs); j++ {
-				avgs[i][j] /= float64(len(bestMatches[i]))
-			}
-			clusters[i] = avgs[i]
 		}
 	}
 	return bestMatches
